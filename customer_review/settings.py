@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'reviews',
     'widget_tweaks',
-    'PIL', 
+    'PIL',
 ]
 
 MIDDLEWARE = [
