@@ -1,0 +1,84 @@
+{% extends 'reviews/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Review - {{ product.name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto glass-effect">
+    <div class="bg-white rounded-xl shadow-lg p-8 transform transition-all duration-500 hover:scale-105 hover:shadow-2xl">
+        <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">
+            <i class="fas fa-pen"></i> Review: {{ product.name }}
+        </h2>
+        
+        <form method="post" enctype="multipart/form-data" class="space-y-6" id="review-form">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group mb-6">
+                    <label for="{{ field.id_for_label }}" 
+                           class="block text-lg font-medium text-gray-700 mb-2">
+                        {{ field.label }}
+                    </label>
+                    <div class="relative flex flex-col gap-2">
+                        {% if field|widget_type == 'radioselect' or field|widget_type == 'checkboxselectmultiple' %}
+                            <div class="flex flex-col gap-2">
+                                {% for choice in field %}
+                                    <label class="inline-flex items-center space-x-2">
+                                        {{ choice.tag }}
+                                        <span class="text-gray-700">{{ choice.choice_label }}</span>
+                                    </label>
+                                {% endfor %}
+                            </div>
+                        {% elif field.field.widget.input_type == 'textarea' %}
+                            {% render_field field class="w-full h-32 rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 p-3" %}
+                        {% else %}
+                            {% render_field field class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 p-3" %}
+                        {% endif %}
+                    </div>
+                    
+                    {% if field.errors %}
+                        <div class="mt-2 text-sm text-red-600">
+                            {% for error in field.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {% if field.help_text %}
+                        <p class="mt-2 text-sm text-gray-500">{{ field.help_text }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            
+            <div class="flex justify-end space-x-4">
+                <a href="{% url 'product_list' %}" 
+                   class="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+                <button type="submit" 
+                        class="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-lg hover:from-blue-600 hover:to-blue-800 transition-colors"
+                        id="submit-button">
+                    <i class="fas fa-paper-plane"></i> Submit Review
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('review-form').addEventListener('submit', function(e) {
+    const submitButton = document.getElementById('submit-button');
+    submitButton.disabled = true;
+    submitButton.innerHTML = `
+        <span class="inline-flex items-center">
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Submitting...
+        </span>
+    `;
+});
+</script>
+{% endblock %}

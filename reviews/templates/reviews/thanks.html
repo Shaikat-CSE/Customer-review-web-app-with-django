@@ -1,0 +1,30 @@
+{% extends 'reviews/base.html' %}
+
+{% block title %}Thank You{% endblock %}
+
+{% block content %}
+<div class="max-w-lg mx-auto text-center glass-effect">
+    <div class="bg-white rounded-xl shadow-lg p-8 transform transition-all duration-500 hover:scale-105 hover:shadow-2xl">
+        <div class="mb-6">
+            <svg class="w-16 h-16 mx-auto text-green-500 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+        </div>
+        
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">
+            Thank You!
+        </h2>
+        
+        <p class="text-lg text-gray-600 mb-8">
+            Your feedback helps us improve our products and services.
+        </p>
+        
+        <div class="space-y-4">
+            <a href="{% url 'product_list' %}" 
+               class="inline-block px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-lg hover:from-blue-600 hover:to-blue-800 transition-colors">
+                <i class="fas fa-arrow-right"></i> Review More Products
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
