@@ -1,0 +1,1 @@
+web: gunicorn customer_review.wsgi:application
